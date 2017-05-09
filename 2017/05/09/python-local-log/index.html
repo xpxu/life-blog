@@ -1,0 +1,837 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python,log," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="新月集" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述本文将从下面几个方面进行思考：  为什么要在本地打印log 多进程本地打印log存在的问题 解决方案 解决方案的性能对比 后续的性能提升思路  为什么要在本地打印log打印log是后端服务的一个基本功能。而且，我们往往会把log打印到本地，然后再通过日志收集服务，将本地log文件收集起来。这样做的好处有三点：  将日志生产和日志收集分离开来。 在本地保留日志，更方便查看问题。 避免了直接往远端">
+<meta name="keywords" content="python,log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python多进程本地打印log解决方案">
+<meta property="og:url" content="http://yoursite.com/2017/05/09/python-local-log/index.html">
+<meta property="og:site_name" content="新月集">
+<meta property="og:description" content="概述本文将从下面几个方面进行思考：  为什么要在本地打印log 多进程本地打印log存在的问题 解决方案 解决方案的性能对比 后续的性能提升思路  为什么要在本地打印log打印log是后端服务的一个基本功能。而且，我们往往会把log打印到本地，然后再通过日志收集服务，将本地log文件收集起来。这样做的好处有三点：  将日志生产和日志收集分离开来。 在本地保留日志，更方便查看问题。 避免了直接往远端">
+<meta property="og:updated_time" content="2017-05-08T23:40:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python多进程本地打印log解决方案">
+<meta name="twitter:description" content="概述本文将从下面几个方面进行思考：  为什么要在本地打印log 多进程本地打印log存在的问题 解决方案 解决方案的性能对比 后续的性能提升思路  为什么要在本地打印log打印log是后端服务的一个基本功能。而且，我们往往会把log打印到本地，然后再通过日志收集服务，将本地log文件收集起来。这样做的好处有三点：  将日志生产和日志收集分离开来。 在本地保留日志，更方便查看问题。 避免了直接往远端">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/09/python-local-log/"/>
+
+
+
+
+
+  <title>python多进程本地打印log解决方案 | 新月集</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">新月集</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">用文字认识自己</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/09/python-local-log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="许鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="新月集">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python多进程本地打印log解决方案</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T07:19:00+08:00">
+                2017-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>本文将从下面几个方面进行思考：</p>
+<ol>
+<li>为什么要在本地打印log</li>
+<li>多进程本地打印log存在的问题</li>
+<li>解决方案</li>
+<li>解决方案的性能对比</li>
+<li>后续的性能提升思路</li>
+</ol>
+<h3 id="为什么要在本地打印log"><a href="#为什么要在本地打印log" class="headerlink" title="为什么要在本地打印log"></a>为什么要在本地打印log</h3><p>打印log是后端服务的一个基本功能。而且，我们往往会把log打印到本地，然后再通过日志收集服务，将本地log文件收集起来。这样做的好处有三点：</p>
+<ol>
+<li>将日志生产和日志收集分离开来。</li>
+<li>在本地保留日志，更方便查看问题。</li>
+<li>避免了直接往远端发送日志造成的丢失情况。比如通过UDP的方式往远端的rsyslog服务器发送log，在并发变大时，log丢失非常严重。</li>
+</ol>
+<h3 id="进程本地打印log存在的问题"><a href="#进程本地打印log存在的问题" class="headerlink" title="进程本地打印log存在的问题"></a>进程本地打印log存在的问题</h3><p>要解决多进程往一个文件打印log，我们要考虑两个问题：</p>
+<ul>
+<li>问题1: 多个进程同时往一个文件写log，会不会有问题？</li>
+</ul>
+<blockquote>
+<p>每一次往disk写入的IO操作，是以1个block的大小为原子单位的。现在的系统中，一个block一般是4K。也就是说当一次写入的log信息大小不超过4k，那么这条log的纪录就是原子的。如果这条log大小超过了4k，那么这条log纪录就有可能被别的进程所中断。</p>
+<p>在这里，原子性是由系统本身提供的。在client层面，并不需要任何的加锁操作。也就是说，当我们打印的log不会超过4k时，我们是可以忽略多进程竞争写一个文件的问题的。</p>
+</blockquote>
+<ul>
+<li>问题2: log文件如何实现时间轮转？</li>
+</ul>
+<blockquote>
+<p>打印日志时，需要会将日志按照日期进行轮转。这样能够有效控制单个日志的大小。</p>
+</blockquote>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p><strong>方案一: 基于syslog handler ＋ unix domain socket ＋ rsyslog ＋ logrotate来实现</strong></p>
+<p>这种方案实际上是分成了三个异步的操作：</p>
+<p>（1）多个服务程序往unix domain socket写日志。</p>
+<p>（2）rsyslog服务从unix domain socket上读日志，并写入本地文件。</p>
+<p>（3）设置定时任务，使用logrotate命令来对日志进行切分和轮转。</p>
+<p>这样做的好处是client端的实现比较简单。只要直接使用logging模块中的syslog handler就可以了。这里也不用考虑日志切分的问题，因为日志切分的任务被独立开来。</p>
+<p>这样做的坏处，就是服务器上需要部署额外的服务，增加了运维人员的负担。</p>
+<p><strong>方案二: 基于标准库logging模块来实现</strong></p>
+<p>我们都知道，python标准库为我们提供了logging模块用于打印log。而且logging模块中就有一个TimedRotatingFileHandler来实现文件的轮转。那么我们能不能直接使用它来满足我们的需求呢？</p>
+<p>不幸的是，logging模块自身是线程安全的，但并不是进程安全的。在官方文档<a href="https://docs.python.org/2/library/logging.html" target="_blank" rel="external">Thread Safety</a>一节中，有以下描述：</p>
+<blockquote>
+<p>The logging module is intended to be thread-safe without any special work needing to be done by its clients. It achieves this though using threading locks; there is one lock to serialize access to the module’s shared data, and each handler also creates a lock to serialize access to its underlying I/O.</p>
+</blockquote>
+<p>但是基于前面我们提到的4k大小的问题，其实我们可以认为logging模块写日志也是进程安全的。只要一条log的大小不要超过4k。但是对于日志轮转问题，logging模块中自带的TimedRotatingFileHandler是存在问题的，它并不是进程安全的。</p>
+<p>TimedRotatingFileHandler中的文件轮转函数doRollover中有三步不是进程安全的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">doRollover</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    do a rollover; in this case, a date/time stamp is appended to the filename</div><div class="line">    when the rollover happens.  However, you want the file to be named for the</div><div class="line">    start of the interval, not the current time.  If there is a backup count,</div><div class="line">    then we have to get a list of matching filenames, sort them and remove</div><div class="line">    the one with the oldest suffix.</div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> self.stream:</div><div class="line">        self.stream.close()</div><div class="line">        self.stream = <span class="keyword">None</span></div><div class="line">    <span class="comment"># get the time that this sequence started at and make it a TimeTuple</span></div><div class="line">    currentTime = int(time.time())</div><div class="line">    dstNow = time.localtime(currentTime)[<span class="number">-1</span>]</div><div class="line">    t = self.rolloverAt - self.interval</div><div class="line">    <span class="keyword">if</span> self.utc:</div><div class="line">        timeTuple = time.gmtime(t)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        timeTuple = time.localtime(t)</div><div class="line">        dstThen = timeTuple[<span class="number">-1</span>]</div><div class="line">        <span class="keyword">if</span> dstNow != dstThen:</div><div class="line">            <span class="keyword">if</span> dstNow:</div><div class="line">                addend = <span class="number">3600</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                addend = <span class="number">-3600</span></div><div class="line">            timeTuple = time.localtime(t + addend)</div><div class="line">    dfn = self.baseFilename + <span class="string">"."</span> + time.strftime(self.suffix, timeTuple)</div><div class="line"></div><div class="line">    <span class="comment"># ISSUE1: 存在进程安全问题</span></div><div class="line">    <span class="keyword">if</span> os.path.exists(dfn):</div><div class="line">        os.remove(dfn)</div><div class="line"></div><div class="line">    <span class="comment"># Issue 18940: A file may not have been created if delay is True.</span></div><div class="line">    <span class="comment"># ISSUE2: 存在进程安全问题</span></div><div class="line">    <span class="keyword">if</span> os.path.exists(self.baseFilename):</div><div class="line">        os.rename(self.baseFilename, dfn)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> self.backupCount &gt; <span class="number">0</span>:</div><div class="line">          <span class="comment"># ISSUE3: 存在进程安全问题</span></div><div class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> self.getFilesToDelete():</div><div class="line">            os.remove(s)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self.delay:</div><div class="line">        self.stream = self._open()</div><div class="line">    newRolloverAt = self.computeRollover(currentTime)</div><div class="line">    <span class="keyword">while</span> newRolloverAt &lt;= currentTime:</div><div class="line">        newRolloverAt = newRolloverAt + self.interval</div><div class="line">    <span class="comment">#If DST changes and midnight or weekly rollover, adjust for this.</span></div><div class="line">    <span class="keyword">if</span> (self.when == <span class="string">'MIDNIGHT'</span> <span class="keyword">or</span> self.when.startswith(<span class="string">'W'</span>)) <span class="keyword">and</span> <span class="keyword">not</span> self.utc:</div><div class="line">        dstAtRollover = time.localtime(newRolloverAt)[<span class="number">-1</span>]</div><div class="line">        <span class="keyword">if</span> dstNow != dstAtRollover:</div><div class="line">            <span class="keyword">if</span> <span class="keyword">not</span> dstNow:  <span class="comment"># DST kicks in before next rollover, so we need to deduct an hour</span></div><div class="line">                addend = <span class="number">-3600</span></div><div class="line">            <span class="keyword">else</span>:           <span class="comment"># DST bows out before next rollover, so we need to add an hour</span></div><div class="line">                addend = <span class="number">3600</span></div><div class="line">            newRolloverAt += addend</div><div class="line">    self.rolloverAt = newRolloverAt</div></pre></td></tr></table></figure>
+<p>为什么说上面三个代码块不是进程安全的呢？其实原理很简单。当多个进程同时要去删除一个文件，或者rename一个文件时，必然有一个进程要先执行这个动作。当这个进程执行完后，另外的进程再去运行，必然就要报错。</p>
+<p>那么如何解决这个问题呢？对于上述的第一个删除动作，我们可以直接去掉。对于后面的两个动作， 我们通过加文件锁来解决。更改后的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MultiProcessTimedRotatingFileHandler</span><span class="params">(TimedRotatingFileHandler)</span>:</span></div><div class="line"></div><div class="line">    _stream_lock = <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">doRollover</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        do a rollover; in this case, a date/time stamp is appended to the filename</div><div class="line">        when the rollover happens.  However, you want the file to be named for the</div><div class="line">        start of the interval, not the current time.  If there is a backup count,</div><div class="line">        then we have to get a list of matching filenames, sort them and remove</div><div class="line">        the one with the oldest suffix.</div><div class="line">        """</div><div class="line">        <span class="keyword">if</span> self.stream:</div><div class="line">            self.stream.close()</div><div class="line">            self.stream = <span class="keyword">None</span></div><div class="line">        <span class="comment"># get the time that this sequence started at and make it a TimeTuple</span></div><div class="line">        currentTime = int(time.time())</div><div class="line">        dstNow = time.localtime(currentTime)[<span class="number">-1</span>]</div><div class="line">        t = self.rolloverAt - self.interval</div><div class="line">        <span class="keyword">if</span> self.utc:</div><div class="line">            timeTuple = time.gmtime(t)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            timeTuple = time.localtime(t)</div><div class="line">            dstThen = timeTuple[<span class="number">-1</span>]</div><div class="line">            <span class="keyword">if</span> dstNow != dstThen:</div><div class="line">                <span class="keyword">if</span> dstNow:</div><div class="line">                    addend = <span class="number">3600</span></div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    addend = <span class="number">-3600</span></div><div class="line">                timeTuple = time.localtime(t + addend)</div><div class="line">        dfn = self.baseFilename + <span class="string">'.'</span> + time.strftime(self.suffix, timeTuple)</div><div class="line"></div><div class="line">        <span class="comment"># 加锁保证rename的进程安全</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dfn) <span class="keyword">and</span> os.path.exists(self.baseFilename):</div><div class="line">            fcntl.lockf(self.stream_lock, fcntl.LOCK_EX)</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dfn) <span class="keyword">and</span> os.path.exists(self.baseFilename):</div><div class="line">                    os.rename(self.baseFilename, dfn)</div><div class="line">            <span class="keyword">finally</span>:</div><div class="line">                fcntl.lockf(self.stream_lock, fcntl.LOCK_UN)</div><div class="line"></div><div class="line">        <span class="comment"># 加锁保证删除文件的进程安全</span></div><div class="line">        <span class="keyword">if</span> self.backupCount &gt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">if</span> self.getFilesToDelete():</div><div class="line">                fcntl.lockf(self.stream_lock, fcntl.LOCK_EX)</div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                    files_to_delete = self.getFilesToDelete()</div><div class="line">                    <span class="keyword">if</span> files_to_delete:</div><div class="line">                        <span class="keyword">for</span> s <span class="keyword">in</span> files_to_delete:</div><div class="line">                            os.remove(s)</div><div class="line">                <span class="keyword">finally</span>:</div><div class="line">                    fcntl.lockf(self.stream_lock, fcntl.LOCK_UN)</div><div class="line"></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.delay:</div><div class="line">            <span class="comment"># _open默认是以‘a'的方式打开，是进程安全的</span></div><div class="line">            self.stream = self._open()</div><div class="line"></div><div class="line">        newRolloverAt = self.computeRollover(currentTime)</div><div class="line">        <span class="keyword">while</span> newRolloverAt &lt;= currentTime:</div><div class="line">            newRolloverAt = newRolloverAt + self.interval</div><div class="line">        <span class="comment"># If DST changes and midnight or weekly rollover, adjust for this.</span></div><div class="line">        <span class="keyword">if</span> (self.when == <span class="string">'MIDNIGHT'</span> <span class="keyword">or</span> self.when.startswith(<span class="string">'W'</span>)) <span class="keyword">and</span> <span class="keyword">not</span> self.utc:</div><div class="line">            dstAtRollover = time.localtime(newRolloverAt)[<span class="number">-1</span>]</div><div class="line">            <span class="keyword">if</span> dstNow != dstAtRollover:</div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> dstNow:  <span class="comment"># DST kicks in before next rollover, so we need to deduct an hour</span></div><div class="line">                    addend = <span class="number">-3600</span></div><div class="line">                <span class="keyword">else</span>:           <span class="comment"># DST bows out before next rollover, so we need to add an hour</span></div><div class="line">                    addend = <span class="number">3600</span></div><div class="line">                newRolloverAt += addend</div><div class="line">        self.rolloverAt = newRolloverAt</div><div class="line"></div><div class="line"><span class="meta">    @property</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stream_lock</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._stream_lock:</div><div class="line">            self._stream_lock = self._openLockFile()</div><div class="line">        <span class="keyword">return</span> self._stream_lock</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_getLockFile</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="comment"># Use 'file.lock' and not 'file.log.lock' (Only handles the normal "*.log" case.)</span></div><div class="line">        <span class="keyword">if</span> self.baseFilename.endswith(<span class="string">'.log'</span>):</div><div class="line">            lock_file = self.baseFilename[:<span class="number">-4</span>]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            lock_file = self.baseFilename</div><div class="line">        lock_file += <span class="string">'.lock'</span></div><div class="line">        <span class="keyword">return</span> lock_file</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_openLockFile</span><span class="params">(self)</span>:</span></div><div class="line">        lock_file = self._getLockFile()</div><div class="line">        <span class="keyword">return</span> open(lock_file, <span class="string">'a'</span>)</div></pre></td></tr></table></figure>
+<p>在这里，有两点需要注意：</p>
+<ul>
+<li>关于双检查机制的使用</li>
+</ul>
+<p>我理解的双检查机制是这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>  CONDITION：</div><div class="line">    <span class="comment"># 可能多个进程都等在这里。不doble检查，可能会执行两次。</span></div><div class="line">    加锁：</div><div class="line">        <span class="keyword">if</span> CONDITION：</div><div class="line">            ACTION</div><div class="line">    放锁</div></pre></td></tr></table></figure>
+<p>其实，也可以直接把锁放在最外面，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">加锁：</div><div class="line">     <span class="keyword">if</span> CONDITION：</div><div class="line">       ACTION</div><div class="line">放锁</div></pre></td></tr></table></figure>
+<p>这样做，也就不用双检查了。但是它的坏处是每次都要拿锁。而应用双检查机制时，如果条件不满足，就不用拿锁了。</p>
+<ul>
+<li>拿锁放锁时try…fially的使用</li>
+</ul>
+<p>虽然这里发生异常的情况很小，但是一旦发生就会有死锁的现象。所以，这里使用try…finally来释放锁。如果去看logging模块的源码，它对线程级的加锁和放锁也是这样处理的。</p>
+<h3 id="解决方案的性能对比"><a href="#解决方案的性能对比" class="headerlink" title="解决方案的性能对比"></a>解决方案的性能对比</h3><p>笔者在本地机器上对两种方案进行了压测。在500个client并发的情况下，如果日志轮转非常频繁(每分钟轮转一次)，rsyslog的方案是优于MultiProcessTimedRotatingFileHandler的。但是如果日志轮转次数有限(比如每日凌晨轮转一次)，MultiProcessTimedRotatingFileHandler是优于rsyslog方案的。</p>
+<h3 id="后续的性能提升思路"><a href="#后续的性能提升思路" class="headerlink" title="后续的性能提升思路"></a>后续的性能提升思路</h3><p>写日志的瓶颈就是在IO。可以借鉴和参考java的logback组件的原理和设置来进一步优化写日志的性能。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p>[1] <a href="https://github.com/benoitc/gunicorn/issues/1272" target="_blank" rel="external">How do gunicorn workers log correctly?</a><br>[2] <a href="https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes" target="_blank" rel="external">官方doc: Logging to a single file from multiple processes</a><br>[3] <a href="http://www.cnblogs.com/xybaby/p/6596431.html" target="_blank" rel="external">由一个简单需求到Linux环境下的syslog、unix domain socket</a><br>[4] <a href="http://lightthewoods.me/2013/11/18/Python%E5%A4%9A%E8%BF%9B%E7%A8%8Blog%E6%97%A5%E5%BF%97%E5%88%87%E5%88%86%E9%94%99%E8%AF%AF%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" target="_blank" rel="external">Python多进程log日志切分错误的解决方案</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechat-reward-image.png" alt="许鹏 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay-reward-image.png" alt="许鹏 Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/log/" rel="tag"># log</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/07/beginning/" rel="next" title="新的开始">
+                <i class="fa fa-chevron-left"></i> 新的开始
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="许鹏" />
+          <p class="site-author-name" itemprop="name">许鹏</p>
+           
+              <p class="site-description motion-element" itemprop="description">人生是首哲理诗</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xpxu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/marx7/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-zhihu"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要在本地打印log"><span class="nav-number">2.</span> <span class="nav-text">为什么要在本地打印log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程本地打印log存在的问题"><span class="nav-number">3.</span> <span class="nav-text">进程本地打印log存在的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案的性能对比"><span class="nav-number">5.</span> <span class="nav-text">解决方案的性能对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续的性能提升思路"><span class="nav-number">6.</span> <span class="nav-text">后续的性能提升思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">许鹏</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
