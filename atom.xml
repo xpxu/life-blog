@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>新月集</title>
-  <subtitle>用文字, 照亮自己</subtitle>
+  <subtitle>用文字, 认识自己</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-05-10T00:35:43.000Z</updated>
+  <updated>2017-05-10T15:42:56.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,25 +16,56 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>致我的爷爷</title>
+    <link href="http://yoursite.com/2015/04/22/%E8%87%B4%E6%88%91%E7%9A%84%E7%88%B7%E7%88%B7/"/>
+    <id>http://yoursite.com/2015/04/22/致我的爷爷/</id>
+    <published>2015-04-22T10:17:28.000Z</published>
+    <updated>2017-05-10T15:42:56.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;爷爷，在这个世界上&lt;br&gt;您最疼爱我的人，就是我&lt;br&gt;我大概占了您世界的百分之九十九吧&lt;br&gt;&lt;br&gt;当您突然安静地从这个世界上离去&lt;br&gt;这个星球似乎没有任何的异动&lt;br&gt;风还在徐徐地吹&lt;br&gt;放肆的绿色还在疯长&lt;br&gt;而我知道&lt;br&gt;最疼爱我的爷爷，永远回不来了&lt;br&gt;&lt;br&gt;
+    
+    </summary>
+    
+      <category term="诗歌" scheme="http://yoursite.com/categories/%E8%AF%97%E6%AD%8C/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>行江南</title>
+    <link href="http://yoursite.com/2015/01/10/%E8%A1%8C%E6%B1%9F%E5%8D%97/"/>
+    <id>http://yoursite.com/2015/01/10/行江南/</id>
+    <published>2015-01-10T15:02:36.000Z</published>
+    <updated>2017-05-10T15:42:54.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;撑起一把 油纸伞 走过这江南&lt;br&gt;烟雨迷蒙的小巷 如你般委婉&lt;br&gt;谁把叮咚的小桥流水放慢&lt;br&gt;想你的心思 如何让你细细看&lt;br&gt;&lt;br&gt;坐上一程 乌篷船 眺望那水岸&lt;br&gt;随意泼墨的丹青 如诗般惊叹&lt;br&gt;谁让交错的长短句方寸乱&lt;br&gt;有你的韵脚 总有一句轻轻叹&lt;br&gt;&lt;br&gt;
+    
+    </summary>
+    
+      <category term="诗歌" scheme="http://yoursite.com/categories/%E8%AF%97%E6%AD%8C/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>自勉</title>
     <link href="http://yoursite.com/2012/05/09/%E8%87%AA%E5%8B%89/"/>
     <id>http://yoursite.com/2012/05/09/自勉/</id>
     <published>2012-05-09T07:37:22.000Z</published>
-    <updated>2017-05-10T00:35:43.000Z</updated>
+    <updated>2017-05-10T15:42:57.000Z</updated>
     
     <summary type="html">
     
-      &lt;center&gt;长远的眼界&lt;br&gt;乐观的心态&lt;br&gt;睿智的策略&lt;br&gt;坚定地执行&lt;br&gt;广阔的天地&lt;br&gt;苦涩的风雨&lt;br&gt;未知的迷茫&lt;br&gt;探索的寂静&lt;br&gt;勇敢地前进&lt;br&gt;无限的道路&lt;br&gt;&lt;br&gt;若选定方向&lt;br&gt;就登上山顶&lt;/center&gt;
-
-
-
+      &lt;center&gt;长远的眼界&lt;br&gt;乐观的心态&lt;br&gt;睿智的策略&lt;br&gt;坚定地执行&lt;br&gt;广阔的天地&lt;br&gt;苦涩的风雨&lt;br&gt;未知的迷茫&lt;br&gt;探索的寂静&lt;br&gt;勇敢地前进&lt;br&gt;无限的道路&lt;br&gt;&lt;br&gt;若选定方向&lt;br&gt;就登上山顶&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/center
     
     </summary>
     
       <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
-    
-      <category term="随笔" scheme="http://yoursite.com/tags/%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   
@@ -43,19 +74,17 @@
     <link href="http://yoursite.com/2012/04/17/%E8%B5%A0%E5%85%B6%E4%B9%90/"/>
     <id>http://yoursite.com/2012/04/17/赠其乐/</id>
     <published>2012-04-17T00:45:12.000Z</published>
-    <updated>2017-05-10T01:04:35.000Z</updated>
+    <updated>2017-05-10T15:42:53.000Z</updated>
     
     <summary type="html">
     
-      &lt;center&gt;       ——致友人&lt;br&gt;&lt;br&gt;初识其乐在夷陵，后聚京都言不尽。&lt;br&gt;满腹经纶纵天下，睥睨王侯论古今。&lt;br&gt;士别三日当刮目，别时男儿不露情。&lt;br&gt;八载烟云随风过，万里江山送君行。&lt;br&gt;&lt;/center&gt;
+      &lt;center&gt;    ——致友人&lt;br&gt;&lt;br&gt;初识其乐在夷陵，后聚京都言不尽。&lt;br&gt;满腹经纶纵天下，睥睨王侯论古今。&lt;br&gt;士别三日当刮目，别时男儿不露情。&lt;br&gt;八载烟云随风过，万里江山送君行。&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/center&gt;
 
     
     </summary>
     
       <category term="古诗" scheme="http://yoursite.com/categories/%E5%8F%A4%E8%AF%97/"/>
     
-    
-      <category term="古诗" scheme="http://yoursite.com/tags/%E5%8F%A4%E8%AF%97/"/>
     
   </entry>
   
@@ -64,18 +93,74 @@
     <link href="http://yoursite.com/2012/03/12/%E6%B1%9F%E5%8D%97/"/>
     <id>http://yoursite.com/2012/03/12/江南/</id>
     <published>2012-03-12T00:41:54.000Z</published>
-    <updated>2017-05-10T01:05:00.000Z</updated>
+    <updated>2017-05-10T15:43:00.000Z</updated>
     
     <summary type="html">
     
-      &lt;center&gt;江南多才子，多字画，历史多英雄。大凡流传后世之物，&lt;br&gt;彪炳史册之人，必定不凡。有感而发，文以记之。&lt;br&gt;                                 ——题记&lt;br&gt;&lt;br&gt;水做的江南是一个多情女子&lt;br&gt;是个文人，就仰慕她&lt;br&gt;与她暗
+      &lt;center&gt;江南多才子，多字画，历史多英雄。大凡流传后世之物，&lt;br&gt;彪炳史册之人，必定不凡。有感而发，文以记之。&lt;br&gt;                                 ——题记&lt;br&gt;&lt;br&gt;水做的江南是一个多情女子&lt;br&gt;是个文人，就仰慕她&lt;br&gt;与她暗送秋波&lt;br&gt;大凡帝王，就把玩她&lt;br&gt;与她嬉戏神游&lt;br&gt;&lt;br&gt;
     
     </summary>
     
       <category term="诗歌" scheme="http://yoursite.com/categories/%E8%AF%97%E6%AD%8C/"/>
     
     
-      <category term="诗歌" scheme="http://yoursite.com/tags/%E8%AF%97%E6%AD%8C/"/>
+  </entry>
+  
+  <entry>
+    <title>高处与低处</title>
+    <link href="http://yoursite.com/2009/05/10/%E9%AB%98%E5%A4%84%E4%B8%8E%E4%BD%8E%E5%A4%84/"/>
+    <id>http://yoursite.com/2009/05/10/高处与低处/</id>
+    <published>2009-05-10T10:54:53.000Z</published>
+    <updated>2017-05-10T15:42:52.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;一万多米的高空上&lt;br&gt;我并没有办法伸出手去&lt;br&gt;触摸天空&lt;br&gt;&lt;br&gt;一层厚厚的机壳将我生生困在里面&lt;br&gt;&lt;br&gt;
+    
+    </summary>
+    
+      <category term="诗歌" scheme="http://yoursite.com/categories/%E8%AF%97%E6%AD%8C/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>春天不是读书天</title>
+    <link href="http://yoursite.com/2009/04/10/%E6%98%A5%E5%A4%A9%E4%B8%8D%E6%98%AF%E8%AF%BB%E4%B9%A6%E5%A4%A9/"/>
+    <id>http://yoursite.com/2009/04/10/春天不是读书天/</id>
+    <published>2009-04-10T09:25:13.000Z</published>
+    <updated>2017-05-10T15:43:01.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;绿园花事纷繁，浓浓的绿意青翠欲滴，呢喃的小鸟在温暖的阳光里穿梭不止，偶尔小憩于草地，又时而倒影于安静的湖水，优雅来去。每次从自习室归来，都忍不住要望绿园多看几眼。一阵风迎面扑来，像恋人柔柔的手，好想把她一把抓住。如此明媚的春日，打心底里，我是不大愿意去自习室呆着的。这种心情不是偶然才有，细细想来，最早应该可以追溯到上小学。那个时候，我第一次看到了这句诗。&lt;/p&gt;
+&lt;p&gt;全篇是这样的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;春天不是读书天：关在堂前，闷短寿缘！&lt;br&gt;春天不是读书天：掀开被帘，投奔自然。&lt;br&gt;春天不是读书天：鸟语树尖，花笑西园。&lt;br&gt;春天不是读书天：宁梦蝴蝶，与花同眠。&lt;br&gt;春天不是读书天：放个纸鸢，飞上半天。&lt;br&gt;春天不是读书天：舞雩风前，恍若神仙。&lt;br&gt;春天不是读书天：放牛塘边，赤脚种田。&lt;br&gt;春天不是读书天：工罢游园，苦中有甜。&lt;br&gt;春天不是读书天：之乎者焉，太讨人嫌！&lt;br&gt;春天不是读书天：书里流连，非呆即癫。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="散文" scheme="http://yoursite.com/categories/%E6%95%A3%E6%96%87/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>我们</title>
+    <link href="http://yoursite.com/2008/08/10/%E6%88%91%E4%BB%AC%EF%BC%8D%E5%9F%8E%E5%B8%82%E5%BF%97%E6%84%BF%E8%80%85%E4%B9%8B%E6%AD%8C/"/>
+    <id>http://yoursite.com/2008/08/10/我们－城市志愿者之歌/</id>
+    <published>2008-08-10T14:57:22.000Z</published>
+    <updated>2017-05-10T15:46:22.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;    ——城市志愿者之歌&lt;br&gt;&lt;br&gt;我们的小亭子 玲珑而建&lt;br&gt;就像一朵热烈而不乏可爱的小花&lt;br&gt;开放在那茫茫的绿绿大草原&lt;br&gt;&lt;br&gt;我们的眼睛 鲜活而亮&lt;br&gt;看到了涌入北京的激情洋溢的空气&lt;br&gt;看到了遍布大街小巷的全人类的共同的脚印&lt;br&gt;&lt;br&gt;我们的耳朵 静默而立&lt;br&gt;聆听跌宕起伏的呐喊和全世界的共同的心跳&lt;br&gt;聆听掌声还有赞誉 还有激动的呼吸&lt;br&gt;
+    
+    </summary>
+    
+      <category term="诗歌" scheme="http://yoursite.com/categories/%E8%AF%97%E6%AD%8C/"/>
+    
     
   </entry>
   
