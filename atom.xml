@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-05-09T15:54:41.000Z</updated>
+  <updated>2017-05-10T00:35:43.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,17 +16,17 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>新的开始</title>
-    <link href="http://yoursite.com/2017/05/09/beginning/"/>
-    <id>http://yoursite.com/2017/05/09/beginning/</id>
-    <published>2017-05-09T15:54:41.000Z</published>
-    <updated>2017-05-09T15:54:41.000Z</updated>
+    <title>自勉</title>
+    <link href="http://yoursite.com/2012/05/09/%E8%87%AA%E5%8B%89/"/>
+    <id>http://yoursite.com/2012/05/09/自勉/</id>
+    <published>2012-05-09T07:37:22.000Z</published>
+    <updated>2017-05-10T00:35:43.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;开始正式写博客了。&lt;/p&gt;
-&lt;p&gt;既然写，就要写好。而且，要一直写下去。&lt;/p&gt;
-&lt;p&gt;Good Luck，buddy！&lt;/p&gt;
+      &lt;center&gt;长远的眼界&lt;br&gt;乐观的心态&lt;br&gt;睿智的策略&lt;br&gt;坚定地执行&lt;br&gt;广阔的天地&lt;br&gt;苦涩的风雨&lt;br&gt;未知的迷茫&lt;br&gt;探索的寂静&lt;br&gt;勇敢地前进&lt;br&gt;无限的道路&lt;br&gt;&lt;br&gt;若选定方向&lt;br&gt;就登上山顶&lt;/center&gt;
+
+
 
     
     </summary>
@@ -35,6 +35,45 @@
     
     
       <category term="随笔" scheme="http://yoursite.com/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>赠其乐</title>
+    <link href="http://yoursite.com/2012/04/17/%E8%B5%A0%E5%85%B6%E4%B9%90/"/>
+    <id>http://yoursite.com/2012/04/17/赠其乐/</id>
+    <published>2012-04-17T00:45:12.000Z</published>
+    <updated>2017-05-10T01:04:35.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;       ——致友人&lt;br&gt;&lt;br&gt;初识其乐在夷陵，后聚京都言不尽。&lt;br&gt;满腹经纶纵天下，睥睨王侯论古今。&lt;br&gt;士别三日当刮目，别时男儿不露情。&lt;br&gt;八载烟云随风过，万里江山送君行。&lt;br&gt;&lt;/center&gt;
+
+    
+    </summary>
+    
+      <category term="古诗" scheme="http://yoursite.com/categories/%E5%8F%A4%E8%AF%97/"/>
+    
+    
+      <category term="古诗" scheme="http://yoursite.com/tags/%E5%8F%A4%E8%AF%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>江南</title>
+    <link href="http://yoursite.com/2012/03/12/%E6%B1%9F%E5%8D%97/"/>
+    <id>http://yoursite.com/2012/03/12/江南/</id>
+    <published>2012-03-12T00:41:54.000Z</published>
+    <updated>2017-05-10T00:46:21.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;center&gt;江南多才子，多字画，历史多英雄。大凡流传后世之物，&lt;br&gt;彪炳史册之人，必定不凡。有感而发，文以记之。&lt;br&gt;                                 ——题记&lt;br&gt;&lt;br&gt;水做的江南是一个多情女子&lt;br&gt;是个文人，就仰慕她&lt;br&gt;与她暗
+    
+    </summary>
+    
+    
+      <category term="诗歌" scheme="http://yoursite.com/tags/%E8%AF%97%E6%AD%8C/"/>
     
   </entry>
   
