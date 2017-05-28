@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>新月集</title>
-  <subtitle>入乎其内，出乎其外</subtitle>
+  <subtitle>林伟文的诗及远方</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
@@ -108,24 +108,6 @@
     </summary>
     
       <category term="填词" scheme="http://yoursite.com/categories/%E5%A1%AB%E8%AF%8D/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>自勉</title>
-    <link href="http://yoursite.com/2012/05/09/%E8%87%AA%E5%8B%89/"/>
-    <id>http://yoursite.com/2012/05/09/自勉/</id>
-    <published>2012-05-09T07:37:22.000Z</published>
-    <updated>2017-05-10T15:55:36.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;center&gt;长远的眼界&lt;br&gt;乐观的心态&lt;br&gt;睿智的策略&lt;br&gt;坚定地执行&lt;br&gt;广阔的天地&lt;br&gt;苦涩的风雨&lt;br&gt;未知的迷茫&lt;br&gt;探索的寂静&lt;br&gt;勇敢地前进&lt;br&gt;无限的道路&lt;br&gt;&lt;br&gt;若选定方向&lt;br&gt;就登上山顶&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/center
-    
-    </summary>
-    
-      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
   </entry>
